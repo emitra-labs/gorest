@@ -1,6 +1,6 @@
 # gorest
 
-Quickly build RESTful APIs in Go with auto-generated OpenAPI 3.1 documentation.
+Quickly build RESTful API in Go with auto-generated OpenAPI 3.1 documentation.
 
 ## Features
 
