@@ -2,6 +2,7 @@ package gorest
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -132,14 +133,15 @@ func Start() error {
 	spec = strings.ReplaceAll(spec, "\"Model", "\"")
 	spec = strings.ReplaceAll(spec, "\"Types", "\"")
 
+	var specJSON any
+	json.Unmarshal([]byte(spec), &specJSON)
+
 	server.Echo.GET("/docs", func(c echo.Context) error {
-		c.Set("Content-Type", "text/html")
-		return c.String(http.StatusOK, fmt.Sprintf(swaggerHTML, config.Info.Title))
+		return c.HTML(http.StatusOK, fmt.Sprintf(swaggerHTML, config.Info.Title))
 	})
 
 	server.Echo.GET("/openapi.json", func(c echo.Context) error {
-		c.Set("Content-Type", "application/json")
-		return c.String(http.StatusOK, spec)
+		return c.JSON(http.StatusOK, specJSON)
 	})
 
 	server.Echo.GET("/health", func(c echo.Context) error {
