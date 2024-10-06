@@ -144,7 +144,7 @@ func Start() error {
 		return c.JSON(http.StatusOK, specJSON)
 	})
 
-	server.Echo.GET("/health", func(c echo.Context) error {
+	server.Echo.GET("/", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
 	})
 
