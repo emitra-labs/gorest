@@ -10,6 +10,7 @@ import (
 
 	"github.com/emitra-labs/common/errors"
 	"github.com/emitra-labs/common/validator"
+	"github.com/emitra-labs/gorest/middleware"
 	"github.com/labstack/echo/v4"
 	"github.com/sethvargo/go-envconfig"
 	"github.com/swaggest/openapi-go/openapi31"
@@ -158,9 +159,12 @@ func Shutdown() error {
 }
 
 type RouteConfig struct {
-	Summary     string
-	Description string
-	Tags        []string
+	Summary      string
+	Description  string
+	Tags         []string
+	Authenticate bool
+	SuperAdmin   bool
+	Permission   string
 }
 
 func Add[I, O any](
@@ -172,9 +176,14 @@ func Add[I, O any](
 	in := new(I)
 	out := new(O)
 	config := RouteConfig{}
+	middlewares := []echo.MiddlewareFunc{}
 
 	if len(configs) > 0 {
 		config = configs[0]
+	}
+
+	if config.Authenticate || config.SuperAdmin || config.Permission != "" {
+		middlewares = append(middlewares, middleware.Authenticate())
 	}
 
 	op, _ := server.OpenAPI.Reflector.NewOperationContext(method, path)
@@ -202,7 +211,7 @@ func Add[I, O any](
 		}
 
 		return c.JSON(http.StatusOK, res)
-	})
+	}, middlewares...)
 }
 
 func GetHandler() *echo.Echo {

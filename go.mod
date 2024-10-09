@@ -1,9 +1,11 @@
 module github.com/emitra-labs/gorest
 
-go 1.23.1
+go 1.23.2
 
 require (
-	github.com/emitra-labs/common v1.0.0
+	github.com/emitra-labs/authn v1.0.1
+	github.com/emitra-labs/common v1.0.1
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/sethvargo/go-envconfig v1.1.0
 	github.com/steinfletcher/apitest v1.5.17
