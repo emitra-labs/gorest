@@ -73,6 +73,8 @@ func init() {
 		},
 	}
 
+	server.OpenAPI.Reflector.Spec.SetHTTPBearerTokenSecurity("Bearer token", "JWT", "")
+
 	server.Echo.HTTPErrorHandler = func(err error, c echo.Context) {
 		code := http.StatusInternalServerError
 		message := "Internal Server Error"
@@ -182,16 +184,17 @@ func Add[I, O any](
 		config = configs[0]
 	}
 
-	if config.Authenticate || config.SuperAdmin || config.Permission != "" {
-		middlewares = append(middlewares, middleware.Authenticate())
-	}
-
 	op, _ := server.OpenAPI.Reflector.NewOperationContext(method, path)
 	op.SetSummary(config.Summary)
 	op.SetDescription(config.Description)
 	op.SetTags(config.Tags...)
 	op.AddReqStructure(in)
 	op.AddRespStructure(out)
+
+	if config.Authenticate || config.SuperAdmin || config.Permission != "" {
+		middlewares = append(middlewares, middleware.Authenticate())
+		op.AddSecurity("Bearer token")
+	}
 
 	if err := server.OpenAPI.Reflector.AddOperation(op); err != nil {
 		panic(err)
