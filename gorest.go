@@ -157,15 +157,30 @@ func Shutdown() error {
 	return server.Echo.Shutdown(ctx)
 }
 
+type RouteConfig struct {
+	Summary     string
+	Description string
+	Tags        []string
+}
+
 func Add[I, O any](
 	method string,
 	path string,
 	f func(context.Context, *I) (*O, error),
+	configs ...RouteConfig,
 ) {
 	in := new(I)
 	out := new(O)
+	config := RouteConfig{}
+
+	if len(configs) > 0 {
+		config = configs[0]
+	}
 
 	op, _ := server.OpenAPI.Reflector.NewOperationContext(method, path)
+	op.SetSummary(config.Summary)
+	op.SetDescription(config.Description)
+	op.SetTags(config.Tags...)
 	op.AddReqStructure(in)
 	op.AddRespStructure(out)
 

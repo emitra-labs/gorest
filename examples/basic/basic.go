@@ -16,7 +16,11 @@ func sayHello(ctx context.Context, req *types.Empty) (*types.BasicResponse, erro
 }
 
 func main() {
-	gorest.Add(http.MethodGet, "/hello", sayHello)
+	gorest.Add(http.MethodGet, "/hello", sayHello, gorest.RouteConfig{
+		Summary:     "Say hello",
+		Description: `Say hello to the world`,
+		Tags:        []string{"Greeting"},
+	})
 
 	log.Fatal(gorest.Start())
 }
