@@ -11,10 +11,10 @@ github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSV
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/emitra-labs/authn v1.0.1 h1:Aimppx+3RveoMFjeTWE2EC6/ghuuk5JIKcV7cPBfrNY=
-github.com/emitra-labs/authn v1.0.1/go.mod h1:rs011A46hWqgx/Kyqgrm7tm/fS6uLjb3rfinn3/EU00=
-github.com/emitra-labs/common v1.0.1 h1:LCc85M5til/fsDQGGMwRTN0zvyZIFhfG1h73rmVV16o=
-github.com/emitra-labs/common v1.0.1/go.mod h1:QmUdS1+rtahoGT83e9w2rapnUbrh0lwxcFoIbzU/4dA=
+github.com/emitra-labs/authn v1.0.2 h1:LYiuCuMNBmDTThcjqUk8A8AVCAEONVNcWVJr4+402a4=
+github.com/emitra-labs/authn v1.0.2/go.mod h1:rs011A46hWqgx/Kyqgrm7tm/fS6uLjb3rfinn3/EU00=
+github.com/emitra-labs/common v1.0.2 h1:0sXF7SmHDpuFZjpJevelTSatbytAaGvMXWiV9DZS9nE=
+github.com/emitra-labs/common v1.0.2/go.mod h1:QmUdS1+rtahoGT83e9w2rapnUbrh0lwxcFoIbzU/4dA=
 github.com/gabriel-vasile/mimetype v1.4.5 h1:J7wGKdGu33ocBOhGy0z653k/lFKLFDPJMG8Gql0kxn4=
 github.com/gabriel-vasile/mimetype v1.4.5/go.mod h1:ibHel+/kbxn9x2407k1izTA1S81ku1z/DlgOW2QE0M4=
 github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=

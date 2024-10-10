@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/emitra-labs/authn"
-	"github.com/emitra-labs/common/constant"
 	"github.com/emitra-labs/common/errors"
 	"github.com/labstack/echo/v4"
 )
@@ -25,9 +24,9 @@ func Authenticate() echo.MiddlewareFunc {
 				return err
 			}
 
-			ctx := context.WithValue(c.Request().Context(), constant.UserID, claims.Subject)
-			ctx = context.WithValue(ctx, constant.SessionID, claims.SessionID)
-			ctx = context.WithValue(ctx, constant.SuperAdmin, claims.SuperAdmin)
+			ctx := context.WithValue(c.Request().Context(), authn.UserID, claims.Subject)
+			ctx = context.WithValue(ctx, authn.SessionID, claims.SessionID)
+			ctx = context.WithValue(ctx, authn.SuperAdmin, claims.SuperAdmin)
 
 			c.SetRequest(c.Request().WithContext(ctx))
 

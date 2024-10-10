@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/emitra-labs/authn"
-	"github.com/emitra-labs/common/constant"
 	"github.com/emitra-labs/common/types"
 	"github.com/emitra-labs/gorest"
 	"github.com/golang-jwt/jwt/v5"
@@ -39,7 +38,7 @@ func createProduct(ctx context.Context, req *Product) (*types.BasicResponse, err
 }
 
 func restricted(ctx context.Context, req *types.Empty) (*types.BasicResponse, error) {
-	userID, _ := ctx.Value(constant.UserID).(string)
+	userID, _ := ctx.Value(authn.UserID).(string)
 
 	return &types.BasicResponse{
 		Message: fmt.Sprintf("UserID: %s", userID),
