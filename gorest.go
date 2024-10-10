@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 
@@ -184,7 +185,7 @@ func Add[I, O any](
 		config = configs[0]
 	}
 
-	op, _ := server.OpenAPI.Reflector.NewOperationContext(method, path)
+	op, _ := server.OpenAPI.Reflector.NewOperationContext(method, formatOpenAPIPath(path))
 	op.SetSummary(config.Summary)
 	op.SetDescription(config.Description)
 	op.SetTags(config.Tags...)
@@ -194,6 +195,10 @@ func Add[I, O any](
 	if config.Authenticate || config.SuperAdmin || config.Permission != "" {
 		middlewares = append(middlewares, middleware.Authenticate())
 		op.AddSecurity("Bearer token")
+	}
+
+	if config.SuperAdmin {
+		middlewares = append(middlewares, middleware.SuperAdmin())
 	}
 
 	if err := server.OpenAPI.Reflector.AddOperation(op); err != nil {
@@ -219,4 +224,9 @@ func Add[I, O any](
 
 func GetHandler() *echo.Echo {
 	return server.Echo
+}
+
+func formatOpenAPIPath(path string) string {
+	re := regexp.MustCompile(`:(\w+)`)
+	return re.ReplaceAllString(path, `{$1}`)
 }
