@@ -168,6 +168,19 @@ type RouteConfig struct {
 	Authenticate bool
 	SuperAdmin   bool
 	Permission   string
+	RateLimit    *RateLimitConfig
+}
+
+type RateLimitConfig struct {
+	Count  int
+	Period time.Duration
+}
+
+func RateLimit(count int, period time.Duration) *RateLimitConfig {
+	return &RateLimitConfig{
+		Count:  count,
+		Period: period,
+	}
 }
 
 func Add[I, O any](
@@ -199,6 +212,10 @@ func Add[I, O any](
 
 	if config.SuperAdmin {
 		middlewares = append(middlewares, middleware.SuperAdmin())
+	}
+
+	if config.RateLimit != nil {
+		middlewares = append(middlewares, middleware.RateLimit(config.RateLimit.Count, config.RateLimit.Period))
 	}
 
 	if err := server.OpenAPI.Reflector.AddOperation(op); err != nil {

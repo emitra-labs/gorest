@@ -11,6 +11,7 @@ require (
 	github.com/steinfletcher/apitest v1.5.17
 	github.com/steinfletcher/apitest-jsonpath v1.7.2
 	github.com/swaggest/openapi-go v0.2.54
+	golang.org/x/time v0.7.0
 )
 
 require (
@@ -21,6 +22,7 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.22.1 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
