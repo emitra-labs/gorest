@@ -12,6 +12,7 @@ import (
 	"github.com/emitra-labs/common/errors"
 	"github.com/emitra-labs/common/validator"
 	"github.com/emitra-labs/gorest/middleware"
+	"github.com/emitra-labs/gorest/store"
 	"github.com/labstack/echo/v4"
 	"github.com/sethvargo/go-envconfig"
 	"github.com/swaggest/openapi-go/openapi31"
@@ -26,6 +27,7 @@ type Config struct {
 	Port      int `env:"GOREST_PORT, default=3000"`
 	Info      Info
 	ServerURL string `env:"GOREST_SERVER_URL, default=http://localhost:3000"`
+	RedisURL  string `env:"GOREST_REDIS_URL"`
 }
 
 type Info struct {
@@ -54,6 +56,12 @@ func init() {
 	err = validator.Validate(config)
 	if err != nil {
 		panic(err)
+	}
+
+	if config.RedisURL != "" {
+		if err := store.Open(config.RedisURL); err != nil {
+			panic(err)
+		}
 	}
 
 	// Create server
@@ -156,6 +164,10 @@ func Start() error {
 }
 
 func Shutdown() error {
+	if config.RedisURL != "" {
+		store.Close()
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	return server.Echo.Shutdown(ctx)

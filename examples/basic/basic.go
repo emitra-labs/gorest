@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/emitra-labs/common/types"
 	"github.com/emitra-labs/gorest"
@@ -22,6 +23,7 @@ func main() {
 		Description: `Say hello to the world`,
 		Tags:        []string{"Greeting"},
 		// Permission: permission.CreateTeam,
+		RateLimit: gorest.RateLimit(3, 10*time.Second),
 	})
 
 	log.Fatal(gorest.Start())
