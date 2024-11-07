@@ -2,6 +2,7 @@ package gorest
 
 import (
 	"context"
+	"crypto"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -13,6 +14,7 @@ import (
 	"github.com/emitra-labs/common/validator"
 	"github.com/emitra-labs/gorest/middleware"
 	"github.com/emitra-labs/gorest/store"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/sethvargo/go-envconfig"
 	"github.com/swaggest/openapi-go/openapi31"
@@ -28,6 +30,7 @@ type Config struct {
 	Info      Info
 	ServerURL string `env:"GOREST_SERVER_URL, default=http://localhost:3000"`
 	RedisURL  string `env:"GOREST_REDIS_URL"`
+	PublicKey string `env:"GOREST_PUBLIC_KEY"`
 }
 
 type Info struct {
@@ -42,6 +45,7 @@ type OpenAPI struct {
 
 var config *Config
 var server *Server
+var publicKey crypto.PublicKey
 
 func init() {
 	config = new(Config)
@@ -60,6 +64,13 @@ func init() {
 
 	if config.RedisURL != "" {
 		if err := store.Open(config.RedisURL); err != nil {
+			panic(err)
+		}
+	}
+
+	if config.PublicKey != "" {
+		publicKey, err = jwt.ParseEdPublicKeyFromPEM([]byte(config.PublicKey))
+		if err != nil {
 			panic(err)
 		}
 	}
@@ -218,7 +229,7 @@ func Add[I, O any](
 	op.AddRespStructure(out)
 
 	if config.Authenticate || config.SuperAdmin || config.Permission != "" {
-		middlewares = append(middlewares, middleware.Authenticate())
+		middlewares = append(middlewares, middleware.Authenticate(publicKey))
 		op.AddSecurity("Bearer token")
 	}
 

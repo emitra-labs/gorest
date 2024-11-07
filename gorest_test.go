@@ -8,9 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/emitra-labs/authn"
+	"github.com/emitra-labs/common/constant"
 	"github.com/emitra-labs/common/types"
 	"github.com/emitra-labs/gorest"
+	"github.com/emitra-labs/gorest/middleware"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/steinfletcher/apitest"
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
@@ -38,7 +39,7 @@ func createProduct(ctx context.Context, req *Product) (*types.BasicResponse, err
 }
 
 func restricted(ctx context.Context, req *types.Empty) (*types.BasicResponse, error) {
-	userID, _ := ctx.Value(authn.UserID).(string)
+	userID, _ := ctx.Value(constant.UserID).(string)
 
 	return &types.BasicResponse{
 		Message: fmt.Sprintf("UserID: %s", userID),
@@ -46,14 +47,28 @@ func restricted(ctx context.Context, req *types.Empty) (*types.BasicResponse, er
 }
 
 func TestMain(m *testing.M) {
-	accessToken, _ = authn.GenerateToken(authn.Claims{
+	// Generate a key pair:
+	// openssl genpkey -algorithm ed25519 -outform PEM -out private_key.pem
+	// openssl pkey -in private_key.pem -pubout -outform PEM -out public_key.pem
+
+	privateKeyString := os.Getenv("GOREST_PRIVATE_KEY")
+	privateKey, err := jwt.ParseEdPrivateKeyFromPEM([]byte(privateKeyString))
+	if err != nil {
+		panic(err)
+	}
+
+	accessToken, err = jwt.NewWithClaims(jwt.SigningMethodEdDSA, middleware.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   "john",
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(5 * time.Minute)),
 		},
 		SessionID:  "123",
 		SuperAdmin: true,
-	})
+	}).SignedString(privateKey)
+
+	if err != nil {
+		panic(err)
+	}
 
 	gorest.Add(http.MethodGet, "/hello", sayHello)
 
