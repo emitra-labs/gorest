@@ -96,7 +96,15 @@ func init() {
 
 	server.OpenAPI.Reflector.Spec.SetHTTPBearerTokenSecurity("Bearer token", "JWT", "")
 
-	server.Echo.Use(echo_middleware.CORS())
+	server.Echo.Use(echo_middleware.CORSWithConfig(echo_middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{
+			echo.HeaderAccept,
+			echo.HeaderAuthorization,
+			echo.HeaderContentType,
+			echo.HeaderOrigin,
+		},
+	}))
 
 	server.Echo.HTTPErrorHandler = func(err error, c echo.Context) {
 		code := http.StatusInternalServerError
