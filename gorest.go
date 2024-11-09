@@ -16,7 +16,6 @@ import (
 	"github.com/emitra-labs/gorest/store"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
-	echo_middleware "github.com/labstack/echo/v4/middleware"
 	"github.com/sethvargo/go-envconfig"
 	"github.com/swaggest/openapi-go/openapi31"
 )
@@ -95,16 +94,6 @@ func init() {
 	}
 
 	server.OpenAPI.Reflector.Spec.SetHTTPBearerTokenSecurity("Bearer token", "JWT", "")
-
-	server.Echo.Use(echo_middleware.CORSWithConfig(echo_middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowHeaders: []string{
-			echo.HeaderAccept,
-			echo.HeaderAuthorization,
-			echo.HeaderContentType,
-			echo.HeaderOrigin,
-		},
-	}))
 
 	server.Echo.HTTPErrorHandler = func(err error, c echo.Context) {
 		code := http.StatusInternalServerError
