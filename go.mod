@@ -6,7 +6,7 @@ require (
 	github.com/bsm/redislock v0.9.4
 	github.com/emitra-labs/common v1.0.7
 	github.com/golang-jwt/jwt/v5 v5.2.1
-	github.com/labstack/echo/v4 v4.12.0
+	github.com/labstack/echo/v4 v4.13.0
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/sethvargo/go-envconfig v1.1.0
 	github.com/steinfletcher/apitest v1.5.17
@@ -24,7 +24,6 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.22.1 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
